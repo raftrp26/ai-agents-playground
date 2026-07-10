@@ -2,3 +2,7 @@
 .env
 __pycache__/
 .ipynb_checkpoints/
+
+# AUTODOC datasets
+notebooks/AUTODOC/*.csv
+notebooks/AUTODOC/*.csv:Zone.Identifier

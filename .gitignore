@@ -6,3 +6,6 @@ __pycache__/
 # AUTODOC datasets
 notebooks/AUTODOC/*.csv
 notebooks/AUTODOC/*.csv:Zone.Identifier
+
+# Google credentials
+secretary-agent/credentials/

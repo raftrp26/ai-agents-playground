@@ -5,6 +5,7 @@ from transcriptAudio import transcribe_audio
 from event_interpreter import interpret_calendar_event
 from datetime import datetime
 from zoneinfo import ZoneInfo
+from pydantic import BaseModel
 
 app = FastAPI()
 
@@ -29,10 +30,25 @@ async def execute(audio: UploadFile):
         now = datetime.now(ZoneInfo("Europe/Lisbon"))
         event_call = interpret_calendar_event(transcription, now)
 
-        return {
-            "status": "interpreted",
-            "transcription": transcription,
-            "event": event_call.model_dump(mode="json")
-        }
+        if event_call.status == "needs_clarification":
+            return {
+                "status": "needs_clarification",
+                "questions": event_call.clarification_questions,
+                "event": event_call.model_dump(mode="json")
+            }
+        if event_call.status == "ready_for_confirmation":
+            return {
+                "status": "ready_for_confirmation",
+                "event": event_call.model_dump(mode="json")
+            }
     finally:
         os.remove(temporary_path)
+
+class ClarificationRequest(BaseModel):
+    answer: str
+
+@app.post("/clarify")
+def clarify(request: ClarificationRequest):
+    return {
+        "received_answer": request.answer
+    }

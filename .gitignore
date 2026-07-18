@@ -9,3 +9,6 @@ notebooks/AUTODOC/*.csv:Zone.Identifier
 
 # Google credentials
 secretary-agent/credentials/
+
+# Streamlit
+.streamlit/secrets.toml
